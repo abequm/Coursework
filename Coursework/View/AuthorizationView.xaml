@@ -1,0 +1,26 @@
+﻿<UserControl x:Class="Coursework.View.AuthorizationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Coursework.View"
+             xmlns:viewmodel="clr-namespace:Coursework.ViewModel"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance viewmodel:AuthorizationViewModel}"
+             d:DesignHeight="450" d:DesignWidth="400">
+    <Grid Background="AliceBlue">
+        <Button Content="Назад" Command="{Binding Back}"
+                Width="120" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5"/>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Label Content="Логин" Width="100" Height="25"/>
+            <TextBox Width="100" Height="25" Text="{Binding Login,UpdateSourceTrigger=PropertyChanged}"/>
+            <Label Content="{Binding loginError}" Foreground="Red" HorizontalAlignment="Center">
+            </Label>
+            <Label Content="Пароль" Width="100" Height="25"/>
+            <TextBox Width="100" Height="25" Text="{Binding Password,UpdateSourceTrigger=PropertyChanged}"/>
+            <Label Content="{Binding passwordError}" Foreground="Red" HorizontalAlignment="Center">
+            </Label>
+            <Button Command="{Binding NavigateToUManage}" Padding="4" Content="Авторизоваться" Margin="15 15 15 0"/>
+            <Button Command="{Binding NavigateToRegistration}" Padding="4" Content="Зарегистрироваться" Margin="15 15 15 0"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

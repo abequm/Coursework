@@ -1,0 +1,249 @@
+﻿<UserControl x:Class="Coursework.View.UniversityInfoView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:viewmodel="clr-namespace:Coursework.ViewModel" xmlns:model="clr-namespace:Coursework.Model"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance Type=viewmodel:UniversityInfoViewModel}" x:Name="control"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Background="AliceBlue" Margin="5">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="115"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Button Command="{Binding Back}" Content="К университетам" Padding="10,0"/>
+        <Grid 
+            Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Run Text="{Binding Path=University.Name, StringFormat='{}{0},'}"/>
+                <Run Text="{Binding Path=University.Region, StringFormat='{}{0},'}"/>
+                <Run Text="{Binding Path=University.City, StringFormat='г.{0},'}"/>
+                <Run Text="{Binding Path=University.Address,StringFormat='{}{0}'}"/>
+            </TextBlock>
+            <StackPanel Orientation="Horizontal" Grid.Column="1" Visibility="Collapsed">
+                <Label Content="Поиск"/>
+                <TextBox Width="100" VerticalAlignment="Center" Margin="10,0"/>
+            </StackPanel>
+        </Grid>
+        <StackPanel x:Name="FiltersStack" Grid.Row="1" Grid.Column="0" 
+                    Margin="5 25 5 25" Orientation="Vertical">
+                <StackPanel.Resources>
+                    <Style TargetType="StackPanel">
+                        <Setter Property="Orientation" Value="Vertical"/>
+                    </Style>
+                    <Style TargetType="TextBox">
+                        <Setter Property="Height" Value="20"/>
+                    </Style>
+                </StackPanel.Resources>
+                <TextBlock Text="Фильтр" HorizontalAlignment="Center" Margin="0" Padding="0" Opacity="0.3"/>
+                <StackPanel x:Name="TypeStack"
+                         Margin="0 0 0 10">
+                    <TextBlock Text="Тип" HorizontalAlignment="Left" Margin="3"/>
+                    <ComboBox Width="100" SelectedValue="{Binding Type}" SelectedValuePath="Content">
+                        <ComboBoxItem Content="Не указано" IsSelected="True"/>
+                        <ComboBoxItem Content="Бюджет"/>
+                        <ComboBoxItem Content="Коммерция"/>
+                    </ComboBox>
+                </StackPanel>
+                <StackPanel x:Name="FormStack" 
+                Margin="0 10 0 10">
+                    <TextBlock Text="Форма" HorizontalAlignment="Left" Margin="3"/>
+                    <ComboBox Width="100" SelectedValue="{Binding Form}" SelectedValuePath="Content">
+                        <ComboBoxItem Content="Не указано" IsSelected="True"/>
+                        <ComboBoxItem Content="Очная"/>
+                        <ComboBoxItem Content="Заочная"/>
+                    </ComboBox>
+                </StackPanel>
+                <StackPanel x:Name="AvgScoreStack"
+                        Margin="0 10 0 10">
+                    <TextBlock Text="Средний балл" HorizontalAlignment="Left" Margin="3"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <TextBlock Text="От" Width="20" VerticalAlignment="Center"/>
+                        <TextBox Text="{Binding FromAvgScore}" TextChanged="AvgScoreTextChanged"
+                        Width="25" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                        <TextBlock Text="До" Width="20" VerticalAlignment="Center" Margin="5 0 0 0"/>
+                        <TextBox Text="{Binding ToAvgScore}" TextChanged="AvgScoreTextChanged"
+                        Width="25" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel x:Name="PriceStack"
+                        Margin="0 10 0 10" >
+                    <TextBlock Text="Цена" HorizontalAlignment="Left" Margin="3"/>
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <TextBlock Text="От" Width="20" VerticalAlignment="Center"/>
+                            <TextBox Text="{Binding FromPrice}"  PreviewTextInput="PreviewDigits"
+                            Width="80" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <TextBlock Text="До" Width="20" VerticalAlignment="Center"/>
+                            <TextBox Text="{Binding ToPrice}" PreviewTextInput="PreviewDigits"
+                            Width="80" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Margin="0 30 0 0">
+                        <Button Content="Применить" Command="{Binding ApplyFilter}"/>
+                    </StackPanel>
+
+
+
+                </StackPanel>
+            </StackPanel>
+        <ListBox ItemsSource="{Binding Specialties}"
+                 Grid.Column="1" Grid.Row="1" Margin="5"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.PanningDeceleration="1">
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="{x:Type model:Specialty}" x:Name="ItemSpecialty">
+                    <Grid MaxWidth="609"  Width="609">
+                        <Grid.Style>
+                            <Style TargetType="Grid">
+                                <Setter Property="Background" Value="WhiteSmoke"/>
+                                <Setter Property="Margin" Value="5"/>
+                                <Setter Property="Width" Value="Auto"/>
+                            </Style>
+                        </Grid.Style>
+                        <Grid.ColumnDefinitions>
+                        </Grid.ColumnDefinitions >
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Orientation="Horizontal">
+                            <Label ContentStringFormat="Специальность {0}" Content="{Binding Name}"/>
+                            <Label ContentStringFormat="Код специальности {0}" Content="{Binding Code}"/>
+                            <Label Content="{Binding Path=Duration}" ContentStringFormat="Длительность {0}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Форма обучения"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <StackPanel.Resources>
+                                        <Style TargetType="StackPanel">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ElementName=NowSpec, Path=Visibility}" Value="Visible">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding ElementName=OldSpec, Path=Visibility}" Value="Visible">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </StackPanel.Resources>
+                                    <Label ContentStringFormat="Бюджетных {0}" Content="{Binding BCount}"/>
+                                    <Label ContentStringFormat="Коммерческих {0}" Content="{Binding CCount}"/>
+                                </StackPanel>
+                            </StackPanel>
+                            <Grid >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel>
+                                    <ListBox Width="Auto" ItemsSource="{Binding NowSpec}" x:Name="NowSpec">
+                                        <ListBox.Style>
+                                            <Style TargetType="{x:Type ListBox}">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem }}}"
+                                                         Value="True">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                    <Trigger Property="HasItems" Value="False">
+                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ListBox.Style>
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate DataType="{x:Type model:SpecificSpecialty}">
+                                                <StackPanel>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Label Content="{Binding Type}"/>
+                                                        <Label Content="{Binding Form}"/>
+                                                        <Label Content="{Binding Count}" ContentStringFormat="{}{0} мест"/>
+                                                        <Label Content="{Binding AvgScore}" ContentStringFormat="Средний балл {0}"/>
+                                                    </StackPanel>
+                                                    <TextBlock Text="{Binding Path=Price, StringFormat='Цена {0} руб. в год'}" Margin="5">
+                                                        <TextBlock.Resources>
+                                                            <Style TargetType="TextBlock">
+                                                                <Style.Triggers>
+                                                                    <Trigger Property="Text" Value="Цена 0 руб. в год">
+                                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                                    </Trigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBlock.Resources>
+                                                    </TextBlock>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                    <StackPanel>
+                                        <StackPanel.Resources>
+                                            <Style TargetType="StackPanel">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding ElementName=OldSpec, Path=HasItems}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </StackPanel.Resources>
+                                        <Label Content="Прошедшие конкурсы"/>
+                                        <ListBox Width="Auto" ItemsSource="{Binding OldSpec}" x:Name="OldSpec">
+                                            <ListBox.Style>
+                                                <Style TargetType="{x:Type ListBox}">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem }}}"
+                                                         Value="True">
+                                                            <Setter Property="Visibility" Value="Visible"/>
+                                                        </DataTrigger>
+                                                        <Trigger Property="HasItems" Value="False">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </ListBox.Style>
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate DataType="{x:Type model:SpecificSpecialty}">
+                                                    <StackPanel>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <Label Content="{Binding Type}"/>
+                                                            <Label Content="{Binding Form}"/>
+                                                            <Label Content="{Binding Count}" ContentStringFormat="{}{0} мест"/>
+                                                            <Label Content="{Binding AvgScore}" ContentStringFormat="Средний балл {0}"/>
+                                                            <Label Content="{Binding Year}" ContentStringFormat='Конкурс {0} года' HorizontalAlignment="Right"/>
+                                                        </StackPanel>
+                                                        <TextBlock Text="{Binding Path=Price, StringFormat='Цена {0} руб. в год'}" Margin="5">
+                                                            <TextBlock.Resources>
+                                                                <Style TargetType="TextBlock">
+                                                                    <Style.Triggers>
+                                                                        <Trigger Property="Text" Value="Цена 0 руб. в год">
+                                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                                        </Trigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </TextBlock.Resources>
+                                                        </TextBlock>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+
+        </ListBox>
+    </Grid>
+</UserControl>

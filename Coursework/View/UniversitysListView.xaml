@@ -1,0 +1,75 @@
+﻿<UserControl x:Class="Coursework.View.UniversitysListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Coursework.View"
+             xmlns:model="clr-namespace:Coursework.Model"
+             xmlns:viewModel="clr-namespace:Coursework.ViewModel"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance viewModel:UniversitiesListViewModel}"
+             d:DesignHeight="450" d:DesignWidth="800" x:Name="Control">
+    <Grid Background="AliceBlue" >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="33"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="3*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel HorizontalAlignment="Left">
+                <Button Content="В меню" Command="{Binding Back}" Padding="10,0" Width="115" Height="25" Margin="5"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Grid.Column="1">
+                <Label Content="Поиск" VerticalAlignment="Center"/>
+                <TextBox Width="100"  VerticalAlignment="Center" Margin="10,0" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
+            </StackPanel>
+        </Grid>
+        <StackPanel Grid.Row="1">
+            <ListBox x:Name="List"
+                     ItemsSource="{Binding universitiesSearch}" Background="White" 
+                     Width="800" Height="425">
+                <ListBox.ItemTemplate>
+                    <DataTemplate DataType="model:University">
+                        <Grid Width="770" MaxWidth="770"  Background="WhiteSmoke" Margin="0 5 0 5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="200"/>
+                                <ColumnDefinition Width="*" MaxWidth="475"/>
+                                <ColumnDefinition Width="100" MinWidth="100"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2">
+                                <Label ContentStringFormat="Наименование - {0}," Grid.Column="0"
+                               Content="{Binding Name}"/>
+                                <Label Content="{Binding FullName}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Margin="0 0 0 10">
+                                <Label
+                               Content="{Binding Region}"/>
+                                <Label ContentStringFormat="г. {0}"
+                               Content="{Binding City}"/>
+                                <Label ContentStringFormat="ул. {0}"
+                               Content="{Binding Address}"/>
+                            </StackPanel>
+                            <StackPanel  Grid.Column="2" Grid.RowSpan="3" Orientation="Vertical" Width="100" VerticalAlignment="Center">
+                                <Button Height="30" Opacity="0.75" Width="90" 
+                                Command="{Binding ElementName=Control, Path=DataContext.SeeMore}" CommandParameter="{Binding}" Margin="3"
+                                HorizontalAlignment="Center" Background="White" >Подробнее</Button>
+                                <Button Command="{Binding ElementName=Control,Path=DataContext.Report}" CommandParameter="{Binding}" Margin="3"
+                                        Height="20" Opacity="0.75" Width="90" 
+                                        HorizontalAlignment="Center" Background="White">Отчет</Button>
+                            </StackPanel>
+                            <Label Grid.Row="2" Content="{Binding SpecCount}"
+                               ContentStringFormat="Количество специальностей {0}"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </StackPanel>
+    </Grid>
+</UserControl>
